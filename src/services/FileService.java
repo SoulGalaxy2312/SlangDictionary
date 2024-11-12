@@ -1,28 +1,32 @@
 package services;
 
-import java.util.Map;
-import java.util.HashMap;
+import models.Defs;
+import models.Records;
+import models.Slang;
+
 import java.util.List;
 import java.io.*;
 
 public class FileService {
     private LineProcessor lineProcessor = new LineProcessor();
 
-    public Map<String, List<String> > readData(String fileName) throws IOException {
+    public Records readData(String fileName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
-        Map<String, List<String> > result = new HashMap<>();
+        Records result = new Records();
 
         String line = reader.readLine();
         while (line != null) {
             this.lineProcessor.process(line);
-            String slang = this.lineProcessor.getSlang();
-            List<String> definitions = this.lineProcessor.getDefinitions();
+            Slang slang = this.lineProcessor.getSlang();
+            Defs definitions = this.lineProcessor.getDefinitions();
 
             // Check if 2 attributes are both processed
             if (slang != null && definitions != null) {
-                List<String> values = result.putIfAbsent(slang, definitions);
+                List<String> defs = definitions.getDefs();
+                Defs values = result.putIfAbsent(slang, definitions);
                 if (values != null) {
-                    for (String definition : definitions) {
+                    
+                    for (String definition : defs) {
                         values.add(definition);
                     }
                 }

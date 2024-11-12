@@ -1,11 +1,11 @@
 package services;
 
-import java.util.ArrayList;
-import java.util.List;
+import models.Defs;
+import models.Slang;
 
 public class LineProcessor {
-    private String slang = null;
-    private List<String> definitions = null;
+    private Slang slang;
+    private Defs definitions;
     
     public void process(String line) {
         this.slang = null;
@@ -19,8 +19,8 @@ public class LineProcessor {
             return;
         }
 
-        this.slang = elements[0];
-        this.definitions = new ArrayList<>();
+        this.slang = new Slang(elements[0]);
+        this.definitions = new Defs();
 
         String[] defs = elements[1].split("\\|");
         for (String def : defs) {
@@ -28,11 +28,11 @@ public class LineProcessor {
         }
     }
     
-    public String getSlang() {
+    public Slang getSlang() {
         return this.slang;
     }
 
-    public List<String> getDefinitions() {
+    public Defs getDefinitions() {
         return this.definitions;
     }
 }
