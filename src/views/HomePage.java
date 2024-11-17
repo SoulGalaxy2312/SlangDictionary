@@ -3,12 +3,18 @@ package views;
 import javax.swing.*;
 
 import controllers.ViewController;
+import models.Records;
+import services.FileService;
 
 import java.awt.*;
 import java.awt.event.*;
 
 public class HomePage extends JFrame {
     private ViewController viewController;
+    
+    private Records records;
+
+    private FileService fileService = new FileService();
 
     private int numBtns = 10;
 
@@ -27,10 +33,17 @@ public class HomePage extends JFrame {
 
     public HomePage(ViewController controller) {
         this.viewController = controller;
-        
+        try {
+            records = fileService.readData("slang.txt");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(10, 1));
-        setSize(500, 500);
+        setMinimumSize(new Dimension(500, 500));
+        setWindowLocationToSecondQuarter();
 
         ActionListener actionListener = new ActionController();
 
@@ -50,7 +63,7 @@ public class HomePage extends JFrame {
 
             switch (command) {
                 case "1":
-                    view = new FindSlangDefsView();
+                    view = new FindBySlangView(records, HomePage.this);
                     break;
                 case "2":
                     
@@ -86,7 +99,19 @@ public class HomePage extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
+    // https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
+    private void setWindowLocationToSecondQuarter() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        int x = screenWidth / 4;
+        int y = (screenHeight - getHeight()) / 2;
+
+        setLocation(x, y);
+    }
+
+    public static void main(String[] args) {    
         ViewController controller = new ViewController();
         new HomePage(controller).setVisible(true);
     }
