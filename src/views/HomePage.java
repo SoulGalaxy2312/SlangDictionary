@@ -75,7 +75,7 @@ public class HomePage extends JFrame {
                     popUpView = new FindBySlangView(records, HomePage.this, 500, 300);
                     break;
                 case "2":
-                    
+                    popUpView = new FindByDefView(records, HomePage.this, 500, 300);
                     break;
                 case "3":
                     
