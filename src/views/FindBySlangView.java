@@ -23,25 +23,20 @@ import models.Slang;
 import java.util.Map;
 import java.util.List;
 
-public class FindBySlangView extends JFrame implements ViewInterface {
+public class FindBySlangView extends PopUpView {
     private Records records;
-
+    
     private FindBySlangActionListener myActionListener;
 
     private JScrollPane scrollPane = new JScrollPane();
 
-    private JFrame parentFrame;
-
-    public FindBySlangView(Records records, JFrame parentFrame) {
-        this.parentFrame = parentFrame;
-
+    public FindBySlangView(Records records, JFrame parentFrame, int width, int height) {
+        super(parentFrame, width, height);
         this.records = records;
 
         setTitle("Find Slang's Definitions");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(500, 300));
-        setToTheRight();
 
         // headers
         JPanel header = new JPanel();
@@ -62,22 +57,9 @@ public class FindBySlangView extends JFrame implements ViewInterface {
 
         add(header, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        super.turnOn();
     }
 
-    public void setToTheRight() {
-        Point parentLocation = parentFrame.getLocation();
-        int parentWidth = parentFrame.getWidth();
-        int parentHeight = parentFrame.getHeight();
-
-        int x = parentLocation.x + parentWidth;
-        int y = parentLocation.y + (parentHeight / 2) - (getHeight() / 2);
-
-        setLocation(x, y);
-    }
-
-    public void turnOn() {
-        setVisible(true);
-    }    
     private class FindBySlangActionListener implements ActionListener {
         private JTextField textField = null;
         private Records records;
@@ -103,7 +85,7 @@ public class FindBySlangView extends JFrame implements ViewInterface {
                 return;
             } 
 
-            ViewInterface notificationView = new NotificationView("Your slang has no definitions", FindBySlangView.this);
+            PopUpView notificationView = new NotificationView("Your slang has no definitions", FindBySlangView.this, 300, 300);
             notificationView.turnOn();
         }
     }

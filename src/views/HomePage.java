@@ -2,7 +2,6 @@ package views;
 
 import javax.swing.*;
 
-import controllers.ViewController;
 import models.Records;
 import services.FileService;
 
@@ -10,7 +9,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class HomePage extends JFrame {
-    private ViewController viewController;
     
     private Records records;
 
@@ -31,22 +29,33 @@ public class HomePage extends JFrame {
         "Guess Definition Of Slang"
     };
 
-    public HomePage(ViewController controller) {
-        this.viewController = controller;
+    public HomePage() {
         try {
             records = fileService.readData("slang.txt");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
         }
-
+        
+        // JFrame configuration
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(10, 1));
+        setLayout(new GridLayout(11, 1, 0, 5));
         setMinimumSize(new Dimension(500, 500));
         setWindowLocationToSecondQuarter();
 
+        // ActionListener
         ActionListener actionListener = new ActionController();
 
+        // header
+        JPanel header = new JPanel();
+        header.setLayout(new FlowLayout());
+        JLabel label = new JLabel("Slang Dictionary");
+        label.setFont(new Font("Arial", Font.BOLD, 24));
+        label.setForeground(Color.RED);
+        header.add(label);
+        add(header);
+
+        // Body (10 function)
         JButton[] btns = new JButton[10];
         for (int i = 0; i < numBtns; i++) {
             btns[i] = new JButton(btnTexts[i]);
@@ -59,11 +68,11 @@ public class HomePage extends JFrame {
     private class ActionController implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
-            ViewInterface view = null;
+            PopUpView popUpView = null;
 
             switch (command) {
                 case "1":
-                    view = new FindBySlangView(records, HomePage.this);
+                    popUpView = new FindBySlangView(records, HomePage.this, 500, 300);
                     break;
                 case "2":
                     
@@ -95,7 +104,6 @@ public class HomePage extends JFrame {
                 default:
                     break;
             }
-            viewController.showView(view);
         }
     }
 
@@ -112,7 +120,6 @@ public class HomePage extends JFrame {
     }
 
     public static void main(String[] args) {    
-        ViewController controller = new ViewController();
-        new HomePage(controller).setVisible(true);
+        new HomePage().setVisible(true);
     }
 }
