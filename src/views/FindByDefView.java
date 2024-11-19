@@ -5,14 +5,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -21,6 +20,7 @@ import javax.swing.SwingConstants;
 import models.Defs;
 import models.Records;
 import models.Slang;
+import services.DisplayRecordService;
 
 public class FindByDefView extends PopUpView {
     private Records records;
@@ -29,8 +29,7 @@ public class FindByDefView extends PopUpView {
 
     private FindByDefActionListener myActionListener; 
 
-    public FindByDefView(Records records, JFrame parentFrame, int width, int height) {
-        
+    public FindByDefView(Records records, JFrame parentFrame, int width, int height) {    
         super(parentFrame, width, height);
         this.records = records;
 
@@ -67,6 +66,8 @@ public class FindByDefView extends PopUpView {
 
         private JScrollPane scrollPane;
 
+        private DisplayRecordService displayRecordService = new DisplayRecordService();
+
         public FindByDefActionListener(Records records, JTextField textField, JScrollPane scrollPane) {
             this.records = records;
             this.textField = textField;
@@ -77,19 +78,20 @@ public class FindByDefView extends PopUpView {
         public void actionPerformed(ActionEvent e) {
             Map<Slang, Defs> data = records.getRecords();
             String input = textField.getText();
-            ArrayList<String> result = new ArrayList<>();
+            Map<Slang, Defs> result = new HashMap<>();
 
             for (Map.Entry<Slang, Defs> entry : data.entrySet()) {
                 Defs defs = entry.getValue();
                 Slang slang = entry.getKey();
-                List<String> defsList = defs.getDefs();
 
+                List<String> defsList = defs.getDefs();
                 boolean isFound = false;
+
                 for (String def : defsList) {
                     String[] words = def.split(" " );
                     for (String word : words) {
                         if (word.equalsIgnoreCase(input)) {
-                            result.add(slang.getSlang());
+                            result.putIfAbsent(slang, defs);
                             isFound = true;
                             break;
                         }
@@ -99,18 +101,12 @@ public class FindByDefView extends PopUpView {
                 }
             }
 
-            if (result.size() > 0) {
-                this.scrollPane.setViewportView(
-                    new JList<>(
-                        result.toArray(
-                            new String[result.size()]
-                        )
-                    )
-                );
-            } else {
+            this.displayRecordService.displayRecords(scrollPane, result);
+
+            if (result.isEmpty()) {
                 PopUpView notificationView = new NotificationView("Your slang has no definitions", FindByDefView.this, 300, 300);
                 notificationView.turnOn();
-            }            
+            }  
         }
     }
 }

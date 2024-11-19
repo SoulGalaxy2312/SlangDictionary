@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JFrame;
 
+import services.FileService;
+
 public class PopUpView extends JFrame {
     private JFrame parentFrame;
 

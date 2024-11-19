@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class HomePage extends JFrame {
+    private final int WIDTH = 500;
+
+    private final int HEIGHT = 300;
     
     private Records records;
 
@@ -72,13 +75,13 @@ public class HomePage extends JFrame {
 
             switch (command) {
                 case "1":
-                    popUpView = new FindBySlangView(records, HomePage.this, 500, 300);
+                    popUpView = new FindBySlangView(records, HomePage.this, WIDTH, HEIGHT, fileService);
                     break;
                 case "2":
-                    popUpView = new FindByDefView(records, HomePage.this, 500, 300);
+                    popUpView = new FindByDefView(records, HomePage.this, WIDTH, HEIGHT);
                     break;
                 case "3":
-                    
+                    popUpView = new ShowHistoryView(HomePage.this, WIDTH, HEIGHT, fileService);
                     break;
                 case "4":
                     

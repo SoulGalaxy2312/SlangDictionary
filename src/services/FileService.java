@@ -4,6 +4,7 @@ import models.Defs;
 import models.Records;
 import models.Slang;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
@@ -34,6 +35,35 @@ public class FileService {
             line = reader.readLine();
         }
         reader.close();
+        return result;
+    }
+
+    public void saveToHistory(String search) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("history.txt", true));
+            writer.append(search);
+            writer.newLine();
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public List<String> getFromHistory() {
+        List<String> result = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("history.txt"));
+            
+            String line = reader.readLine();
+            while (line != null) {
+                result.add(line);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
         return result;
     }
 }

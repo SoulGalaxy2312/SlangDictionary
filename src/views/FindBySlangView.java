@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -18,9 +17,11 @@ import javax.swing.SwingConstants;
 import models.Defs;
 import models.Records;
 import models.Slang;
+import services.DisplayRecordService;
+import services.FileService;
 
 import java.util.Map;
-import java.util.List;
+import java.util.HashMap;
 
 public class FindBySlangView extends PopUpView {
     private Records records;
@@ -29,9 +30,12 @@ public class FindBySlangView extends PopUpView {
 
     private JScrollPane scrollPane = new JScrollPane();
 
-    public FindBySlangView(Records records, JFrame parentFrame, int width, int height) {
+    private FileService fileService;
+
+    public FindBySlangView(Records records, JFrame parentFrame, int width, int height, FileService fileService) {
         super(parentFrame, width, height);
         this.records = records;
+        this.fileService = fileService;
 
         setTitle("Find Slang's Definitions");
         setLayout(new BorderLayout());
@@ -45,7 +49,7 @@ public class FindBySlangView extends PopUpView {
         label.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JTextField textField = new JTextField(20);
-        this.myActionListener = new FindBySlangActionListener(records, textField, scrollPane);
+        this.myActionListener = new FindBySlangActionListener(records, textField, scrollPane, fileService);
 
         JButton findButton = new JButton("find");
         findButton.addActionListener(myActionListener);
@@ -63,11 +67,14 @@ public class FindBySlangView extends PopUpView {
         private JTextField textField = null;
         private Records records;
         private JScrollPane scrollPane;
+        private DisplayRecordService displayRecordService = new DisplayRecordService();
+        private FileService fileService;
 
-        public FindBySlangActionListener(Records records, JTextField textField, JScrollPane scrollPane) {
+        public FindBySlangActionListener(Records records, JTextField textField, JScrollPane scrollPane, FileService fileService) {
             this.records = records;
             this.textField = textField;
             this.scrollPane = scrollPane;
+            this.fileService = fileService;
         }
 
         @Override
@@ -75,17 +82,22 @@ public class FindBySlangView extends PopUpView {
             Map<Slang, Defs> data = records.getRecords();
             String input = textField.getText();
             Slang key = new Slang(input);
+            Map<Slang, Defs> result = new HashMap<>();
 
             if (data.containsKey(key)) {
-                List<String> defs = data.get(key).getDefs();
-                String[] defsStr = defs.toArray(new String[defs.size()]);
-
-                this.scrollPane.setViewportView(new JList<>(defsStr));
-                return;
+                Defs defs = data.get(key);
+                result.put(key, defs);
             } 
 
-            PopUpView notificationView = new NotificationView("Your slang has no definitions", FindBySlangView.this, 300, 300);
-            notificationView.turnOn();
+            // Service section
+            this.fileService.saveToHistory(input);
+            this.displayRecordService.displayRecords(scrollPane, result);
+
+            if (result.isEmpty()) {
+                PopUpView notificationView = new NotificationView("Your slang has no definitions", FindBySlangView.this, 300, 300);
+                notificationView.turnOn();
+            }
+            
         }
     }
 }
