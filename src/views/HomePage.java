@@ -34,14 +34,14 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         try {
-            records = fileService.readData("slang.txt");
+            this.records = fileService.readData("slang.txt");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
         }
         
         // JFrame configuration
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(this.exitFunction());
         setLayout(new GridLayout(11, 1, 0, 5));
         setMinimumSize(new Dimension(500, 500));
         setWindowLocationToSecondQuarter();
@@ -84,7 +84,7 @@ public class HomePage extends JFrame {
                     popUpView = new ShowHistoryView(HomePage.this, WIDTH, HEIGHT, fileService);
                     break;
                 case "4":
-                    
+                    popUpView = new AddNewSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "5":
                     
@@ -120,6 +120,11 @@ public class HomePage extends JFrame {
         int y = (screenHeight - getHeight()) / 2;
 
         setLocation(x, y);
+    }
+
+    private int exitFunction() {
+
+        return 3;
     }
 
     public static void main(String[] args) {    
