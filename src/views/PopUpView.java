@@ -27,6 +27,10 @@ public class PopUpView extends JFrame {
         setVisible(true);
     }
 
+    public void turnOff() {
+        setVisible(false);
+    }
+
     public void setToTheRight() {
         Point parentLocation = parentFrame.getLocation();
         int parentWidth = parentFrame.getWidth();

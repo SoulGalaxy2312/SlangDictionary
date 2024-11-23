@@ -87,7 +87,7 @@ public class HomePage extends JFrame {
                     popUpView = new AddNewSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "5":
-                    
+                    popUpView = new EditSlangView(records, HomePage.this, WIDTH, HEIGHT);
                     break;
                 case "6":
                     
