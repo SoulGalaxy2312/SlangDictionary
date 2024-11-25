@@ -34,17 +34,31 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         try {
-            this.records = fileService.readData("slang.txt");
+            this.records = fileService.readData("newSlang.txt");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return;
+            try {
+                this.records = fileService.readData("slang.txt");
+            } catch (Exception e2) {
+                System.out.println(e.getMessage());
+                System.out.println(e2.getMessage());
+                return;
+            }
         }
         
         // JFrame configuration
-        setDefaultCloseOperation(this.exitFunction());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(11, 1, 0, 5));
         setMinimumSize(new Dimension(500, 500));
         setWindowLocationToSecondQuarter();
+
+        // Add window listener
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                fileService.saveCurrentDictionary("newSlang.txt", records);
+                return;
+            }
+        });
 
         // ActionListener
         ActionListener actionListener = new ActionController();
@@ -90,10 +104,10 @@ public class HomePage extends JFrame {
                     popUpView = new EditSlangView(records, HomePage.this, WIDTH, HEIGHT);
                     break;
                 case "6":
-                    
+                    popUpView = new DeleteSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "7":
-                    
+                
                     break;
                 case "8":
                     
@@ -120,11 +134,6 @@ public class HomePage extends JFrame {
         int y = (screenHeight - getHeight()) / 2;
 
         setLocation(x, y);
-    }
-
-    private int exitFunction() {
-
-        return 3;
     }
 
     public static void main(String[] args) {    

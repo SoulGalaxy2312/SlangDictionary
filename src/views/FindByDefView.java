@@ -33,7 +33,7 @@ public class FindByDefView extends PopUpView {
         super(parentFrame, width, height);
         this.records = records;
 
-        setTitle("Find Slang's Definitions");
+        setTitle("Find slang by definition");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(500, 300));
 
@@ -41,7 +41,7 @@ public class FindByDefView extends PopUpView {
         JPanel header = new JPanel();
         header.setLayout(new FlowLayout());
 
-        JLabel label = new JLabel("Input slang");
+        JLabel label = new JLabel("Input definition");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JTextField textField = new JTextField(20);
@@ -104,7 +104,7 @@ public class FindByDefView extends PopUpView {
             this.displayRecordService.displayRecords(scrollPane, result);
 
             if (result.isEmpty()) {
-                PopUpView notificationView = new NotificationView("Your slang has no definitions", FindByDefView.this, 300, 300);
+                PopUpView notificationView = new NotificationView("Your definition word not match any slang!!!", FindByDefView.this, 300, 300);
                 notificationView.turnOn();
             }  
         }
