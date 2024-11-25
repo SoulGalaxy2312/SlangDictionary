@@ -107,7 +107,7 @@ public class HomePage extends JFrame {
                     popUpView = new DeleteSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "7":
-                
+                    popUpView = new ResetView(HomePage.this, WIDTH, HEIGHT, records, fileService);
                     break;
                 case "8":
                     
