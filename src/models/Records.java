@@ -10,6 +10,10 @@ public class Records {
         return records;
     }
 
+    public void setRecords(Map<Slang, Defs> records) {
+        this.records = records;    
+    }
+
     public void print() {
         for (Map.Entry<Slang, Defs> entry : records.entrySet()) {
                System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());

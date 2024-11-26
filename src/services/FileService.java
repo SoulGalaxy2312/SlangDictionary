@@ -76,7 +76,7 @@ public class FileService {
         return result;
     }
 
-    public void saveCurrentDictionary(String fileName, Records records) {
+    public void saveToFile(String fileName, Records records) {
         Map<Slang, Defs> data = records.getRecords();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));

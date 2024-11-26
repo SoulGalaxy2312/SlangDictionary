@@ -55,13 +55,13 @@ public class HomePage extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                fileService.saveCurrentDictionary("newSlang.txt", records);
+                fileService.saveToFile("newSlang.txt", records);
                 return;
             }
         });
 
         // ActionListener
-        ActionListener actionListener = new ActionController();
+        ActionListener actionListener = new ActionController(this.records);
 
         // header
         JPanel header = new JPanel();
@@ -83,10 +83,17 @@ public class HomePage extends JFrame {
     }
 
     private class ActionController implements ActionListener {
+        private Records records;
+
+        public ActionController(Records records) {
+            this.records = records;    
+        }
+
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             PopUpView popUpView = null;
 
+            System.out.println(records);
             switch (command) {
                 case "1":
                     popUpView = new FindBySlangView(records, HomePage.this, WIDTH, HEIGHT, fileService);
@@ -110,7 +117,7 @@ public class HomePage extends JFrame {
                     popUpView = new ResetView(HomePage.this, WIDTH, HEIGHT, records, fileService);
                     break;
                 case "8":
-                    
+                    popUpView = new TodaySlangView(HomePage.this, WIDTH, HEIGHT, fileService, records);
                     break;
                 case "9":
                     

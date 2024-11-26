@@ -65,7 +65,8 @@ public class ResetView extends PopUpView {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                records = fileService.readData("slang.txt");
+                Records newRecords = fileService.readData("slang.txt"); 
+                this.records.setRecords(newRecords.getRecords());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                     ResetView.this,
