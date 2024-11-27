@@ -123,7 +123,7 @@ public class HomePage extends JFrame {
                     popUpView = new GuessDefinitionView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "10":
-                    
+                    popUpView = new GuessSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 default:
                     break;
