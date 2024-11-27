@@ -120,7 +120,7 @@ public class HomePage extends JFrame {
                     popUpView = new TodaySlangView(HomePage.this, WIDTH, HEIGHT, fileService, records);
                     break;
                 case "9":
-                    
+                    popUpView = new GuessDefinitionView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "10":
                     
