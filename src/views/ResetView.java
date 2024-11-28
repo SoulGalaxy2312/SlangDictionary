@@ -19,7 +19,7 @@ import models.Records;
 import services.FileService;
 
 public class ResetView extends PopUpView {
-    public ResetView(JFrame parentFrame, int width, int height, Records records, FileService fileService) {
+    public ResetView(JFrame parentFrame, int width, int height, Records records, FileService fileService, String fileData) {
         super(parentFrame, width, height);
 
         JPanel main = new JPanel();
@@ -37,7 +37,7 @@ public class ResetView extends PopUpView {
         buttons.add(yesButton);
         buttons.add(noButton);
 
-        yesButton.addActionListener(new YesActionListener(records, fileService));
+        yesButton.addActionListener(new YesActionListener(records, fileService, fileData));
         noButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,16 +55,18 @@ public class ResetView extends PopUpView {
     private class YesActionListener implements ActionListener{
         private Records records;
         private FileService fileService;
+        private String fileData;
 
-        public YesActionListener(Records records, FileService fileService) {
+        public YesActionListener(Records records, FileService fileService, String fileData) {
             this.records = records;
             this.fileService = fileService;
+            this.fileData = fileData;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Records newRecords = fileService.readData("slang.txt"); 
+                Records newRecords = fileService.readData(this.fileData); 
                 this.records.setRecords(newRecords.getRecords());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(

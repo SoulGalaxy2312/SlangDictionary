@@ -19,6 +19,8 @@ public class HomePage extends JFrame {
 
     private int numBtns = 10;
 
+    private String fileData = "data1.txt";
+
     private String[] btnTexts = {
         "Find By Slang Word",
         "Find By Definition",
@@ -37,14 +39,20 @@ public class HomePage extends JFrame {
             this.records = fileService.readData("newSlang.txt");
         } catch (Exception e) {
             try {
-                this.records = fileService.readData("slang.txt");
+                this.records = fileService.readData(fileData);
             } catch (Exception e2) {
                 System.out.println(e.getMessage());
                 System.out.println(e2.getMessage());
                 return;
             }
         }
-        
+
+        // try {
+        //     this.records = fileService.readData("data2.txt");
+        // } catch (Exception e) {
+        //     System.out.println(e.getMessage());
+        // }
+
         // JFrame configuration
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(11, 1, 0, 5));
@@ -93,7 +101,6 @@ public class HomePage extends JFrame {
             String command = e.getActionCommand();
             PopUpView popUpView = null;
 
-            System.out.println(records);
             switch (command) {
                 case "1":
                     popUpView = new FindBySlangView(records, HomePage.this, WIDTH, HEIGHT, fileService);
@@ -114,7 +121,7 @@ public class HomePage extends JFrame {
                     popUpView = new DeleteSlangView(HomePage.this, WIDTH, HEIGHT, records);
                     break;
                 case "7":
-                    popUpView = new ResetView(HomePage.this, WIDTH, HEIGHT, records, fileService);
+                    popUpView = new ResetView(HomePage.this, WIDTH, HEIGHT, records, fileService, fileData);
                     break;
                 case "8":
                     popUpView = new TodaySlangView(HomePage.this, WIDTH, HEIGHT, fileService, records);

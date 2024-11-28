@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Defs {
-    List<String> defs;
+    private List<String> defs;
 
     public Defs() {
         this.defs = new ArrayList<>();
